@@ -2,19 +2,43 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model List<Codecool.CodecoolShop.Models.Product>
+@model ViewModel 
 
 <div class="container">
-    @foreach (var element in Model)
+    <div class="dropdown">
+        <button class="dropbtn">Sort by Category</button>
+        <div class="dropdown-content">
+            @foreach (var el in Model.categories)
+            {
+                @Html.ActionLink(@el.Name, "Index", "Product", new {id = @el.Id, sortBy = "category"})
+            }
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Sort by Supplier</button>
+        <div class="dropdown-content">
+            @foreach (var el in Model.suppliers)
+            {
+                @Html.ActionLink(@el.Name, "Index", "Product", new {id = @el.Id, sortBy = "supplier"})
+            }
+        </div>
+    </div>
+    <br><br>
+    
+    @* @Url.Action("Index", "Product") *@
+    
+    @foreach (var element in Model.products)
     {
-        <div class="col-lg-3 col-lg-3" style="display: inline-block; max-width: 350px; height: 350px">
+        <div class="col-lg-3 col-lg-3" style="display: inline-block; max-width: 250px; height: 250px">
             <div class="card">
-                <img src="img/@(element.Name).jpg" style="height: 50%; width: 50%; align-self: center; padding-top: 10px">
+                
+                    <img src="../../img/@(element.Name).jpg" style="height: 50%; width: 50%; align-self: center; padding-top: 10px">
+                    
 
                 <div class="card-body">
                     <h5 class="card-title text-center">
                         Product
-                        @{ var num = Model.IndexOf(element) + 1;}
+                        @{ var num = Model.products.IndexOf(element) + 1;}
                         @num
                     </h5>
                     <h5 class="card-title">@element.Name</h5>

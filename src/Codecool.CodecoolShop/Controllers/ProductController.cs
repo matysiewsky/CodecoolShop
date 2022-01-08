@@ -22,13 +22,24 @@ namespace Codecool.CodecoolShop.Controllers
             _logger = logger;
             ProductService = new ProductService(
                 ProductDaoMemory.GetInstance(),
-                ProductCategoryDaoMemory.GetInstance());
+                ProductCategoryDaoMemory.GetInstance(), SupplierDaoMemory.GetInstance());
         }
 
-        public IActionResult Index()
+        // public IActionResult Index()
+        // {
+        //     var products = ProductService.GetProductsForCategory(1);
+        //     return View(products.ToList());
+        // }
+        
+        
+        
+        public IActionResult Index(string sortBy="category", int id=1)
         {
-            var products = ProductService.GetProductsForCategory(1);
-            return View(products.ToList());
+            var products = ProductService.GetProductsBy(sortBy, id);
+            var categories = ProductService.GetCategories();
+            var suppliers = ProductService.GetSuppliers();
+            ViewModel model = new ViewModel(products.ToList(), categories.ToList(), suppliers.ToList());
+            return View(model);
         }
 
         public IActionResult Privacy()
@@ -36,10 +47,12 @@ namespace Codecool.CodecoolShop.Controllers
             return View();
         }
 
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
